@@ -1,3 +1,5 @@
+[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/jcaballero90/cobbleverse_server/blob/master/README.md)
+[![es](https://img.shields.io/badge/lang-es-yellow.svg)](https://github.com/jcaballero90/cobbleverse_server/blob/master/README.es.md)
 # Cobbleverse Server en Docker Compose
 ## 
 
