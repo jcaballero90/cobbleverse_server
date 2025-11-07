@@ -1,6 +1,15 @@
 # Cobbleverse Server In Docker Compose
 ## 
 
+## Credits
+Credits to Blue-Kachina for the original solution (https://github.com/Blue-Kachina/cobbleverse_server)
+
+## Changes
+1) Removed sponge dependency.
+2) Updated Forge and Cobbleverse versions to 07/11/2025.
+3) Fixed an issue where the `flatten_dp` function in `install-modpack.sh` was removing the `datapacks` folder.  
+   The absence of datapacks caused a bug where a red chat message appeared saying "Unknown series: kanto", and prevented the player from receiving the Pokédex and Trainer Card after selecting their first Pokémon.
+
 ## What Exactly Is This?
 ### Cobbleverse
 Cobbleverse is a modpack (collection of mods) for Java Minecraft that bring an experience much like the main series of Pokemon games to the world of Minecraft
@@ -15,8 +24,12 @@ This solution will help you set up your own Cobblemon server
 ### First Run
 1) Ensure that you already have Docker/Docker Compose installed
 2) Clone the repository
-3) Navigate to the folder you cloned this repo to
-4) Run the command: `docker-compose up -d` This will instantiate your server (will probably take a minute or two)
+3) Go to https://modrinth.com/modpack/cobbleverse/versions, right click your desired download version button and select "Copy link address"
+4) Replace MODRINTH_URL with the link obtained in the third step
+5) If you want to use the env.file, set up your desired variable values and change its name from .env.example to .env. If you don't, replace the values directly after the hyphen in the docker-compose.yml file 
+   ("${MODRINTH_URL:-URL}"), same for all other variables.
+6) Navigate to the folder you cloned this repo to
+7) Run the command: `docker-compose up -d` This will instantiate your server (will probably take a minute or two)
 
 #### What will happen when I do this?
 1) The system will check to see if the worldname you specified has already been used
@@ -24,12 +37,5 @@ This solution will help you set up your own Cobblemon server
 3) If this is a new world, then the mods that make up this modpack will all be downloaded, and saved to the server in the proper spot
 4) Next the Minecraft server is started up
 
-### How to Play
-The server is using a modpack known as [Cobbleverse](https://modrinth.com/modpack/cobbleverse).
-This modpack includes Cobblemon as well as many sidemods to help recreate a Pokemon-like experience.
-If your server is running mods, then your Minecraft client (the game itself) also needs to have the same mods.
-
-My recommendation is that you use the [Modrinth App](https://modrinth.com/app).  Once it's installed, you can follow the Cobbleverse link above, and it will prompt you to install it into the Modrinth app.  Proceed to do that.  Once you've done that, then you'll actually be able to launch the proper version of Minecraft (equipped with mods) directly from Modrinth there.  That's the recommended approach.
-Once in, simply put in the address of your server.  If you're on the same machine, you can use `localhost` or `127.0.0.1`.
-Sometimes you need to specify the port number too.  This server will be utilizing port `25565`.
-This means you could use `localhost:25565` or `127.0.0.1:localhost`
+### Recommendations
+Download from Modrinth the client with the same version used for the server setup. Remember that client and server MUST have the same version.

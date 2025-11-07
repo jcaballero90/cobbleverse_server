@@ -101,10 +101,10 @@ fi
 # ---------------------------------------------------------------------------
 flatten_dp() {
   local TARGET="$1"
-  if [ -d "$TARGET/datapacks" ]; then
-    echo "⚙️  Flattening nested datapacks in $TARGET"
-    rsync -a "$TARGET/datapacks/" "$TARGET/"
-    rm -rf "$TARGET/datapacks"
+  if [ -d "$TARGET/datapacks/datapacks" ]; then
+    echo "⚙️  Flattening nested datapacks in $TARGET/datapacks"
+    rsync -a "$TARGET/datapacks/datapacks/" "$TARGET/datapacks/"
+    rm -rf "$TARGET/datapacks/datapacks"
   fi
 }
 
@@ -156,10 +156,15 @@ fi
 
 echo "🎉 Modpack install complete for world: $SERVER_WORLDNAME – $(find "$MODPACK_DIR/mods" -name '*.jar' | wc -l) mod jars ready."
 
-# --- Enable spawn‑debug on first install ------------------------------------
+# --- Enable spawn-debug on first install ------------------------------------
 CFG=/data/config/cobblemon/main.json
-jq '.exportSpawnConfig = true' "$CFG" | sponge "$CFG"
-echo "🔧   Set exportSpawnConfig=true (will generate Best‑Spawner config on first boot)"
+if [ -f "$CFG" ]; then
+  TMP="${CFG}.tmp.$$"
+  jq '.exportSpawnConfig = true' "$CFG" > "$TMP" && mv -f "$TMP" "$CFG"
+  echo "🔧   Set exportSpawnConfig=true (will generate Best-Spawner config on first boot)"
+else
+  echo "⚠️  $CFG no existe; salto el cambio de exportSpawnConfig."
+fi
 
 
 touch "$READY_FILE"
