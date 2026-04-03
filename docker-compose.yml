@@ -12,7 +12,14 @@ services:
     environment:
       MODRINTH_URL: ${MODRINTH_URL:-https://cdn.modrinth.com/data/Jkb29YJU/versions/DrJAo7Hk/COBBLEVERSE%201.6.mrpack}
       SERVER_WORLDNAME: ${SERVER_WORLDNAME:-MY_COBBLEVERSE_WORLD}
-      EXTRA_MODS: "spark=https://.../spark.jar;carpet=https://.../carpet.jar"
+      EXTRA_MODS: >-
+        timcore=https://cdn.modrinth.com/data/lVP9aUaY/versions/yPG8odLw/timcore-fabric-1.7.3-1.31.0.jar;
+        cobblemonCounter=https://cdn.modrinth.com/data/rj8uLYP4/versions/eEfCCFXB/counter-fabric-1.7.3-1.9.0.jar;
+        cobblemonIntegrations=https://cdn.modrinth.com/data/NPCfuUI4/versions/ze3sTR1C/cobblemonintegrations-fabric-1.21.1-1.1.6.jar;
+        cobblemonUnchained=https://cdn.modrinth.com/data/wh0wnzrT/versions/uFACxWHR/unchained-fabric-1.7.3-1.7.1.jar;
+        jade=https://cdn.modrinth.com/data/nvQzSEkH/versions/5Sbkzz4O/Jade-1.21.1-Fabric-15.10.5.jar;
+        jadeAddons=https://cdn.modrinth.com/data/fThnVRli/versions/xtWiiv5X/JadeAddons-1.21.1-Fabric-6.0.3.jar;
+        jei=https://cdn.modrinth.com/data/u6dRKJwZ/versions/TvqzuFwN/jei-1.21.1-fabric-19.27.0.340.jar;
     entrypoint: ["/bin/sh", "/scripts/install-modpack.sh"]
 
 
