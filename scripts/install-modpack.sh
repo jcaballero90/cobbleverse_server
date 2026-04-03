@@ -14,6 +14,8 @@ TEMP_DIR="$MODPACK_DIR/temp"
 MRPACK_PATH="$MODPACK_DIR/pack.mrpack"
 READY_FILE="$MODPACK_DIR/.ready-${SERVER_WORLDNAME}"
 DATA_DIR=/data
+EXTRA_MODS=${EXTRA_MODS:-}
+EXTRA_MODS_DIR=/extra-mods
 
 MC_UID=${MC_UID:-1000}
 MC_GID=${MC_GID:-1000}
@@ -74,6 +76,42 @@ jq -c '.files[] | select(.env.server == "required")' "$INDEX_JSON" | while read 
 done
 
 echo "✅ Finished downloading mods."
+
+# ---------------------------------------------------------------------------
+# Download extra mods specified via the EXTRA_MODS env var, which should be a
+# semicolon‑separated list of MOD_NAME=MOD_URL pairs 
+# ---------------------------------------------------------------------------
+mkdir -p "$EXTRA_MODS_DIR"
+rm -rf "$EXTRA_MODS_DIR"/*
+
+if [ -n "$EXTRA_MODS" ]; then
+  echo "➕ Downloading extra mods into $EXTRA_MODS_DIR..."
+  echo "$EXTRA_MODS" | tr ';' '\n' | while IFS='=' read -r MOD_NAME MOD_URL; do
+    [ -z "$MOD_NAME" ] && continue
+    [ -z "$MOD_URL" ] && continue
+
+    FILE_NAME="$(basename "$MOD_URL")"
+    DEST_PATH="$EXTRA_MODS_DIR/$FILE_NAME"
+
+    echo "   • $MOD_NAME -> $FILE_NAME"
+    wget -q -O "$DEST_PATH" "$MOD_URL"
+  done
+fi
+
+if [ -d "$EXTRA_MODS_DIR" ]; then
+  echo "📥 Merging extra mods into modpack mods..."
+  find "$EXTRA_MODS_DIR" -maxdepth 1 -type f -name '*.jar' | while read -r jar; do
+    base="$(basename "$jar")"
+    dest="$MODPACK_DIR/mods/$base"
+
+    if [ -f "$dest" ]; then
+      echo "⚠️  Extra mod $base skipped: already exists in modpack"
+    else
+      echo "   • merging $base"
+      cp "$jar" "$dest"
+    fi
+  done
+fi
 
 # ---------------------------------------------------------------------------
 # Copy override folders from the pack
